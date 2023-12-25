@@ -67,7 +67,7 @@ spec:
       config:
         scale-server-slots: "10"
         src-ip-header: X-Forwarded-For,1
-        # ssl-certificate: "haproxy-ingress/boo-tls"
+        ssl-certificate: "haproxy-ingress/boo-tls"
         cr-global: haproxy-ingress/global
         cr-defaults: haproxy-ingress/defaults
         frontend-config-snippet: |
