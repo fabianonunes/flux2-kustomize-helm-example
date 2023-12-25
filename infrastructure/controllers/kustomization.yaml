@@ -5,3 +5,4 @@ resources:
   - weave-gitops.yaml
   - metallb.yaml
   - haproxy-ingress.yaml
+  - nfs-provisioner.yaml
