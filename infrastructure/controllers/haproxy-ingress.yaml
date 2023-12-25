@@ -13,6 +13,30 @@ spec:
   interval: 24h
   url: https://haproxytech.github.io/helm-charts
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-backend
+  namespace: haproxy-ingress
+spec:
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    name: http
+    port: 1024
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: default-backend
+  namespace: haproxy-ingress
+subsets:
+- addresses:
+  - ip: 192.168.10.70
+  ports:
+  - port: 1024
+    name: http
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -23,7 +47,7 @@ spec:
   chart:
     spec:
       chart: kubernetes-ingress
-      version: 1.32.4
+      version: 1.35.5
       sourceRef:
         kind: HelmRepository
         name: haproxy-ingress
@@ -38,7 +62,7 @@ spec:
       extraArgs:
       - --disable-ipv6
       # - --configmap-tcp-services=haproxy-ingress/tcp-services
-      # - --default-backend-service=haproxy-ingress/default-backend
+      - --default-backend-service=haproxy-ingress/default-backend
       dnsPolicy: ClusterFirstWithHostNet
       config:
         scale-server-slots: "10"
@@ -56,5 +80,3 @@ spec:
           metallb.universe.tf/allow-shared-ip: "10.70"
       serviceMonitor:
         enabled: true
-    defaultBackend:
-      enabled: false
