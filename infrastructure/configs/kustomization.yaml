@@ -4,3 +4,4 @@ resources:
   - cluster-issuers.yaml
   - network-policies.yaml
   - metallb.yaml
+  - haproxy-ingress.yaml
