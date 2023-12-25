@@ -37,6 +37,13 @@ subsets:
   - port: 1024
     name: http
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: haproxy-ingress
+data: {}
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -61,7 +68,7 @@ spec:
         name: haproxy
       extraArgs:
       - --disable-ipv6
-      # - --configmap-tcp-services=haproxy-ingress/tcp-services
+      - --configmap-tcp-services=haproxy-ingress/tcp-services
       - --default-backend-service=haproxy-ingress/default-backend
       dnsPolicy: ClusterFirstWithHostNet
       config:
