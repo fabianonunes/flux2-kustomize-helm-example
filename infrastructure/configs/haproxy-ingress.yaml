@@ -1,0 +1,41 @@
+---
+apiVersion: "core.haproxy.org/v1alpha2"
+kind: Defaults
+metadata:
+  name: defaults
+  namespace: haproxy-ingress
+spec:
+  config:
+    maxconn: 15_000
+    log_format: '"[%t] %ft %b/%s %Tq/%Tw/%Tc/%Tr/%Tt %ST %B %CC %CS %tsc %ac/%fc/%bc/%sc/%rc %sq/%bq %hr %hs %{+Q}r"'
+    balance:
+      algorithm: leastconn
+    http_connection_mode: http-keep-alive
+    redispatch:
+      enabled: enabled
+      interval: -1
+    abortonclose: enabled
+    dontlognull: enabled
+    retries: 2
+    # timeouts
+    connect_timeout: 5_000  # timeout para iniciar a conexão TCP com o server
+    server_timeout: 120_000
+    client_timeout: 30_000
+    queue_timeout: 120_000
+    tunnel_timeout: 3_600_000  # sobrescreve timeout-server e timeout-client para túneis (websocket e CONNECT)
+    http_request_timeout: 10_000
+    client_fin_timeout: 1_000
+    server_fin_timeout: 1_000
+---
+apiVersion: "core.haproxy.org/v1alpha2"
+kind: Global
+metadata:
+  name: global
+  namespace: haproxy-ingress
+spec:
+  config:
+    maxconn: 10000
+  log_targets:
+  - address: /run/shared/log
+    facility: local0
+    level: info
