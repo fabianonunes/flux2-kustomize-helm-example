@@ -32,15 +32,6 @@ sops:
   encrypted_regex: ^(data|stringData)$
   version: 3.8.1
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pihole-secret
-  namespace: pihole
-data:
-  password: cGhvZWxlcGFzc3dvcmQ=
-type: Opaque
----
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
