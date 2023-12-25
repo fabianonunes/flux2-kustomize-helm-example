@@ -80,6 +80,12 @@ spec:
 
     virtualHost: pi.boo.eth0.work
 
+    probes:
+      liveness:
+        initialDelaySeconds: 5
+      readiness:
+        initialDelaySeconds: 5
+
     ingress:
       enabled: true
       annotations:
