@@ -61,9 +61,9 @@ spec:
     serviceDns:
       mixedService: true
       type: LoadBalancer
-      loadBalancerIP: 192.168.10.70
+      loadBalancerIP: 192.168.10.50
       annotations:
-        metallb.universe.tf/allow-shared-ip: "10.70"
+        metallb.universe.tf/allow-shared-ip: "10.50"
       externalTrafficPolicy: Cluster
 
     serviceDhcp:

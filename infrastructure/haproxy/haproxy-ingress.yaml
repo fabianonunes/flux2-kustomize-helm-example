@@ -32,7 +32,7 @@ metadata:
   namespace: haproxy-ingress
 subsets:
 - addresses:
-  - ip: 192.168.10.70
+  - ip: 192.168.10.50
   ports:
   - port: 1024
     name: http
@@ -82,8 +82,8 @@ spec:
           capture request header X-Forwarded-Proto len 32
       service:
         type: LoadBalancer
-        loadBalancerIP: 192.168.10.70
+        loadBalancerIP: 192.168.10.50
         annotations:
-          metallb.universe.tf/allow-shared-ip: "10.70"
+          metallb.universe.tf/allow-shared-ip: "10.50"
       serviceMonitor:
         enabled: true
