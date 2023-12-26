@@ -35,7 +35,7 @@ spec:
 
     nfs:
       server: 192.168.10.4
-      path: /mnt/pool0/kong
+      path: /mnt/pool0/boo
       mountOptions:
       - vers=3
       - nosuid
