@@ -18,11 +18,32 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-controllers-extras
+  name: infra-configs-base
   namespace: flux-system
 spec:
   dependsOn:
   - name: infra-controllers-base
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/configs-base
+  prune: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-controllers-extras
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-configs-base
   interval: 1h
   retryInterval: 1m
   timeout: 5m
@@ -36,18 +57,18 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-configs
+  name: infra-configs-extras
   namespace: flux-system
 spec:
   dependsOn:
-  - name: infra-controllers-extras
+  - name: infra-configs-extras
   interval: 1h
   retryInterval: 1m
   timeout: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/configs
+  path: ./infrastructure/configs-extras
   prune: true
   decryption:
     provider: sops
