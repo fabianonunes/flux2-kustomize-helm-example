@@ -69,22 +69,22 @@ spec:
   - secretName: shiryu-tls
     hosts:
     - shiryu.boo.eth0.work
-# ---
-# apiVersion: monitoring.coreos.com/v1
-# kind: ServiceMonitor
-# metadata:
-#   name: prometheus-openwrt
-#   namespace: external-services
-# spec:
-#   endpoints:
-#   - honorLabels: true
-#     path: /metrics
-#     port: metrics
-#     scheme: http
-#     scrapeTimeout: 10s
-#   namespaceSelector:
-#     matchNames:
-#     - external-services
-#   selector:
-#     matchLabels:
-#       app: shiryu
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-openwrt
+  namespace: external-services
+spec:
+  endpoints:
+  - honorLabels: true
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - external-services
+  selector:
+    matchLabels:
+      app: shiryu
