@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: prometheus
+  namespace: observability
+spec:
+  type: oci
+  interval: 60m0s
+  url: oci://ghcr.io/prometheus-community/charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: prometheus-stack
+  namespace: observability
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: 55.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus
+        namespace: observability
+      interval: 12h
+  values:
+    # https://raw.githubusercontent.com/prometheus-community/helm-charts/kube-prometheus-stack-48.2.2/charts/kube-prometheus-stack/values.yaml
+    grafana:
+      enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+        hosts:
+        - grafana.boo.eth0.work
+        tls:
+        - secretName: grafana-le-cert
+          hosts:
+          - grafana.boo.eth0.work
+
+    prometheus:
+      prometheusSpec:
+        # exigência do haproxy-ingress. ainda não sei a função
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+
+    alertmanager:
+      enabled: false
+    coreDns:
+      enabled: true
+    kubeEtcd:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    kubeProxy:
+      enabled: false
