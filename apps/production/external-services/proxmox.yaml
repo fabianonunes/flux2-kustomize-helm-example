@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxmox
+  namespace: external-services
+spec:
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    name: main
+    port: 8006
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: proxmox
+  namespace: external-services
+subsets:
+- addresses:
+  - ip: 192.168.10.2
+  ports:
+  - port: 8006
+    name: main
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: proxmox
+  namespace: external-services
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    cr-backend: external-services/proxmox
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: proxmox.boo.eth0.work
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: proxmox
+            port:
+              name: main
+  tls:
+  - secretName: proxmox-tls
+    hosts:
+    - proxmox.boo.eth0.work
+---
+apiVersion: "core.haproxy.org/v1alpha2"
+kind: Backend
+metadata:
+  name: proxmox
+  namespace: external-services
+spec:
+  config:
+    mode: http
+    balance:
+      algorithm: "leastconn"
+    abortonclose: disabled
+    forwardfor:
+      enabled: enabled
+    default_server:
+      ssl: enabled
+      check: enabled
+      verify: none
