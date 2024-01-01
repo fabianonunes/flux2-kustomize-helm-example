@@ -19,21 +19,20 @@ metadata:
   namespace: harbor
 type: Opaque
 data:
-  secretKey: ENC[AES256_GCM,data:rKiFTgmAxmmKw1EncKqONw==,iv:1TrjNtfHraul+jmb8tePbLpukqzx1fdAXB1G4Vd3yIA=,tag:E1jALc7PPs4F4sg1j6FXOQ==,type:str]
+  secretKey: ENC[AES256_GCM,data:+8zOeih6JrSvi93mriXg6qEx9ywheinK,iv:Hj38gEssaXjB8N9f4ZRdB36VnRFBididdtp9c6KgFiM=,tag:mZfSZtJgCtAWKyNAHkP/7w==,type:str]
 sops:
   age:
   - recipient: age1wpk6a50fj9hepmve43dtx36fr6rfat6nsms6fx6rf4x2udmmtutsmtzctr
     enc: |
       -----BEGIN AGE ENCRYPTED FILE-----
-      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3TFBlL0g0NjQyVUUwMnp6
-      ME1QeE9DZkVIWFNFUVQwKzhCOW5BVHE0eG5rClplQXhCenh0eVRlOERlUmJLdDJ1
-      djdDT0tIc2JzdDY3UjZDMkdiaEZoVTAKLS0tIER6aGJYTzVZZFhjTjY5ck5MdER6
-      RnNIV21ZNGNReGxUNkY1cXBJR1pmbnMKHBUthNuY3Vi8AwhfZUW4W9zeTelqiP1q
-      syr847bsAkn3u/KEaFUcYmPlDaSGAxOzrQNl3o937ZQ4n/aC29uQhg==
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3UVlUYyt6M29KRXZnUHBy
+      WktUNmNBSXo4WUJ6ampnOGtHVzRUb04vL2lNCjJkMVJVczMyZUxxRWgrQ1U3OXBz
+      T213ZHZhaFAvOThRVFZyYkpFTDk3NncKLS0tIFNPVkFYaVhqMEk4STNPUCtocDli
+      WE9xQUlNK1B4RmowUjZLZlFtaVhOU00KRw9wA6ZIwfMclGiQJ8kTD5KcWDvPLF2D
+      iGSgqSswxPoTm6ktpmZZgcxQYZBwkkeHjvt+LC690/7jxrc7wLak8A==
       -----END AGE ENCRYPTED FILE-----
-  mac: ENC[AES256_GCM,data:GyCMQlKMNi+HtccI1vtw0PBuaPVqZ9IQVdaktzyt43ZfATiTflfDCv/otKt8jRJBt0Sxh0jnYIDYDg2d3C6PR4c4UKEgJ9VQJTK2lTisFGa08fNjBT3xsGAeZL3uJamemHhg+CL6SRD7rZQ6Dgxngl6XjuQ3VFWJkMT+8H0djVA=,iv:SlG5FdOgQaHtgXhRZf3vRsNCqXtPUmcmKqz5STfJZLI=,tag:PmrbmyygMA2Dw0rxnzCvoQ==,type:str]
-  lastmodified: "2024-01-01T13:19:56Z"
-  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2024-01-01T13:27:17Z"
+  mac: ENC[AES256_GCM,data:1pKAhcVpvz0bmwMVUc4lQ3MJPPqh2/dAkn5OA/cHTvntdYM0jB6iWXh0PUIeDknIp19dEhkjnOWyPLJquZbixmUEMxNv2EaAuP7bYRfPpIXfFLS2EoznG81rWJzOSYZ+cRoazvi1jIp9e9Wag2S+kRLGefEa8XyX1rkWTpasBnk=,iv:/gX2TsyUf2ofAXbIWMs4e6BOfgdiduJjPRXQwON4MPY=,tag:TDlzkxMDz0lx8+nadkAACA==,type:str]
   version: 3.8.1
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
