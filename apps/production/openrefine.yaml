@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openrefine
+  labels:
+    eth.work/project: openrefine
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workspace
+  namespace: openrefine
+spec:
+  storageClassName: nfs-storage
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openrefine
+  namespace: openrefine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      eth0.work/service: openrefine
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        eth0.work/service: openrefine
+    spec:
+      restartPolicy: Always
+      containers:
+      - image: ghcr.io/fabianonunes/openrefine:3.7.7-1
+        name: openrefine
+        ports:
+        - containerPort: 3333
+        args:
+        - -x
+        - refine.headless=true
+        env:
+        - name: REFINE_INTERFACE
+          value: 0.0.0.0
+        livenessProbe:
+          httpGet:
+            path: /command/core/get-version
+            port: 3333
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        volumeMounts:
+        - name: workspace
+          mountPath: /root/.local/share/openrefine
+      volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: workspace
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openrefine
+  namespace: openrefine
+spec:
+  ports:
+  - name: http
+    port: 3333
+  selector:
+    eth0.work/service: openrefine
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openrefine
+  namespace: openrefine
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  rules:
+  - host: openrefine.boo.eth0.work
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: openrefine
+            port:
+              name: http
+  tls:
+  - secretName: openrefine-le-cert
+    hosts:
+    - openrefine.boo.eth0.work
