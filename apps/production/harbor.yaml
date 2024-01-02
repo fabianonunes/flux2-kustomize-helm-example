@@ -54,7 +54,7 @@ spec:
     remediation:
       retries: 3
   values:
-    # https://raw.githubusercontent.com/goharbor/harbor-helm/v1.13.1/values.yaml
+    # https://raw.githubusercontent.com/goharbor/harbor-helm/v1.14.0/values.yaml
     expose:
       type: ingress
       tls:
