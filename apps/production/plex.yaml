@@ -30,6 +30,21 @@ spec:
   - ReadWriteMany
   volumeName: plex-media
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-media
+spec:
+  capacity:
+    storage: 500G
+  nfs:
+    server: 192.168.10.4
+    path: /mnt/pool0/plex
+  accessModes:
+  - ReadWriteMany
+  storageClassName: manual
+  volumeMode: Filesystem
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
