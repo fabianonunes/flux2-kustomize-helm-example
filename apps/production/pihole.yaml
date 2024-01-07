@@ -4,6 +4,35 @@ metadata:
   name: pihole
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole
+spec:
+  capacity:
+    storage: 5Gi
+  nfs:
+    server: 192.168.10.4
+    path: /mnt/pool0/boo/pihole
+  accessModes:
+  - ReadWriteMany
+  storageClassName: manual
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: pihole
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: pihole-secret
@@ -89,8 +118,7 @@ spec:
         - pi.boo.eth0.work
 
     persistentVolumeClaim:
-      enabled: true
-      storageClass: nfs-storage
+      existingClaim: pihole
 
     admin:
       existingSecret: pihole-secret
