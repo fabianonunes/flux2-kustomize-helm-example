@@ -6,17 +6,33 @@ metadata:
     eth.work/project: openrefine
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: openrefine-workspace
+spec:
+  capacity:
+    storage: 5G
+  nfs:
+    server: 192.168.10.4
+    path: /mnt/pool0/boo/openrefine
+  accessModes:
+  - ReadWriteMany
+  storageClassName: manual
+  volumeMode: Filesystem
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: workspace
   namespace: openrefine
 spec:
-  storageClassName: nfs-storage
+  storageClassName: manual
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 100Mi
+      storage: 5g
+  volumeName: openrefine-workspace
 ---
 apiVersion: apps/v1
 kind: Deployment
