@@ -118,6 +118,7 @@ spec:
         - pi.boo.eth0.work
 
     persistentVolumeClaim:
+      enabled: true
       existingClaim: pihole
 
     admin:
