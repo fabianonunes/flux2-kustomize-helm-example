@@ -11,7 +11,7 @@ metadata:
   name: openrefine-workspace
 spec:
   capacity:
-    storage: 5G
+    storage: 5Gi
   nfs:
     server: 192.168.10.4
     path: /mnt/pool0/boo/openrefine
@@ -31,7 +31,7 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 5g
+      storage: 5Gi
   volumeName: openrefine-workspace
 ---
 apiVersion: apps/v1
