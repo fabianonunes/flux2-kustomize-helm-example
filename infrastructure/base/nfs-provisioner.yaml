@@ -37,7 +37,7 @@ spec:
       server: 192.168.10.4
       path: /mnt/pool0/boo
       mountOptions:
-      - vers=3
+      - vers=4
       - nosuid
 
     storageClass:
