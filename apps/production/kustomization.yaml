@@ -5,4 +5,5 @@ resources:
 - harbor.yaml
 - openrefine.yaml
 - plex.yaml
+- minio.yaml
 - external-services
