@@ -50,3 +50,5 @@ spec:
     persistence:
       storageClass: nfs-storage
       size: 500Gi
+      annotations:
+        helm.sh/resource-policy: "keep"
