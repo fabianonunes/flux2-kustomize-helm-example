@@ -31,6 +31,12 @@ spec:
         namespace: minio
       interval: 12h
   values:
+    extraEnvVars:
+    - name: MINIO_SERVER_URL
+      value: https://minio-api.boo.eth0.work
+    - name: MINIO_BROWSER_REDIRECT_URL
+      value: https://minio.boo.eth0.work
+
     ingress:
       enabled: true
       ingressClassName: haproxy
