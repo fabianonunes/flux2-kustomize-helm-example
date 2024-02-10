@@ -94,8 +94,6 @@ kind: Ingress
 metadata:
   name: openrefine
   namespace: openrefine
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   rules:
   - host: openrefine.boo.eth0.work
@@ -108,7 +106,3 @@ spec:
             name: openrefine
             port:
               name: http
-  tls:
-  - secretName: openrefine-le-cert
-    hosts:
-    - openrefine.boo.eth0.work
