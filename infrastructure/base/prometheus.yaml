@@ -54,11 +54,11 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: nfs-storage
-              accessModes: ["ReadWriteMany"]
+              storageClassName: openebs-hostpath
+              accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
-                  storage: 50Gi
+                  storage: 10Gi
 
     alertmanager:
       enabled: false
