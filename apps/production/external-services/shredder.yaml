@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shredder
+  namespace: external-services
+  labels:
+    app: shredder
+spec:
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    name: metrics
+    port: 9100
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: shredder
+  namespace: external-services
+subsets:
+- addresses:
+  - ip: 192.168.10.5
+  ports:
+  - port: 9100
+    name: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-shredder
+  namespace: external-services
+spec:
+  endpoints:
+  - honorLabels: true
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - external-services
+  selector:
+    matchLabels:
+      app: shredder
