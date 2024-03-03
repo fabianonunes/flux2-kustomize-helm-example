@@ -77,9 +77,6 @@ spec:
         ssl-certificate: "haproxy-ingress/boo-tls"
         cr-global: haproxy-ingress/global
         cr-defaults: haproxy-ingress/defaults
-        frontend-config-snippet: |
-          capture request header X-Forwarded-For len 32
-          capture request header X-Forwarded-Proto len 32
       service:
         type: LoadBalancer
         loadBalancerIP: 192.168.10.50
