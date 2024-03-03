@@ -50,6 +50,15 @@ spec:
         # exigência do haproxy-ingress. ainda não sei a função
         podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
+        retention: 30d
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: nfs-storage
+              accessModes: ["ReadWriteMany"]
+              resources:
+                requests:
+                  storage: 50Gi
 
     alertmanager:
       enabled: false
