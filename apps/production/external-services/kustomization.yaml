@@ -9,3 +9,4 @@ resources:
 - unifi.yaml
 - openwrt.yaml
 - shredder.yaml
+- raphael.yaml
