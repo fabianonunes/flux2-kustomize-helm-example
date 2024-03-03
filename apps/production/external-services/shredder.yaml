@@ -29,7 +29,10 @@ kind: ServiceMonitor
 metadata:
   name: prometheus-shredder
   namespace: external-services
+  labels:
+    jobLabel: node-exporter
 spec:
+  jobLabel: jobLabel
   endpoints:
   - honorLabels: true
     path: /metrics
