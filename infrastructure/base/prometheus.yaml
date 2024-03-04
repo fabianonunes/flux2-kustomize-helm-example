@@ -44,7 +44,13 @@ spec:
         - secretName: grafana-le-cert
           hosts:
           - grafana.boo.eth0.work
-
+      persistence:
+        enabled: true
+        type: pvc
+        storageClassName: nfs-storage
+        accessModes:
+        - ReadWriteMany
+        size: 20Gi
     prometheus:
       prometheusSpec:
         # exigência do haproxy-ingress. ainda não sei a função
