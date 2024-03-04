@@ -22,7 +22,7 @@ metadata:
   name: csi-proxmox
   namespace: csi-proxmox
 spec:
-  interval: 30m
+  interval: 60m
   chart:
     spec:
       chart: csi-proxmox
