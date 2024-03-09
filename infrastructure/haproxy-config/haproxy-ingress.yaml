@@ -1,5 +1,5 @@
 ---
-apiVersion: "core.haproxy.org/v1alpha2"
+apiVersion: "ingress.v1.haproxy.org/v1"
 kind: Defaults
 metadata:
   name: defaults
@@ -27,7 +27,7 @@ spec:
     client_fin_timeout: 1_000
     server_fin_timeout: 1_000
 ---
-apiVersion: "core.haproxy.org/v1alpha2"
+apiVersion: "ingress.v1.haproxy.org/v1"
 kind: Global
 metadata:
   name: global
@@ -36,7 +36,8 @@ spec:
   config:
     maxconn: 10000
   log_targets:
-  - address: /run/shared/log
+  - index: 0
+    address: /run/shared/log
     facility: local0
     level: info
 ---
