@@ -1,4 +1,4 @@
-apiVersion: "core.haproxy.org/v1alpha2"
+apiVersion: ingress.v1.haproxy.org/v1
 kind: Backend
 metadata:
   name: truenas
