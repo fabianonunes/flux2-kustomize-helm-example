@@ -5,6 +5,7 @@ metadata:
   namespace: external-services
 spec:
   config:
+    name: shiryu
     mode: http
     balance:
       algorithm: "leastconn"

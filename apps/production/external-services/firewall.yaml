@@ -5,6 +5,7 @@ metadata:
   namespace: external-services
 spec:
   config:
+    name: firewall
     mode: http
     balance:
       algorithm: "leastconn"

@@ -55,6 +55,7 @@ metadata:
   namespace: external-services
 spec:
   config:
+    name: proxmox
     mode: http
     balance:
       algorithm: "leastconn"
