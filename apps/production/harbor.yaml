@@ -121,7 +121,7 @@ spec:
       external:
         host: postgresql-postgresql-ha-pgpool.postgresql
         port: 5432
-        username: postgres
+        username: harbor
         coreDatabase: registry
         existingSecret: postgresql-credentials
         sslmode: disable
