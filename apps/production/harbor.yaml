@@ -115,3 +115,13 @@ spec:
 
     notary:
       enabled: false
+
+    database:
+      type: external
+      external:
+        host: postgresql-postgresql-ha-pgpool.postgresql
+        port: 5432
+        username: postgres
+        coreDatabase: registry
+        existingSecret: postgresql-credentials
+        sslmode: disable
