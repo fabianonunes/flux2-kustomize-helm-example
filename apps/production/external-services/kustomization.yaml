@@ -5,8 +5,5 @@ resources:
 - namespace.yaml
 - proxmox.yaml
 - truenas.yaml
-- firewall.yaml
-- unifi.yaml
-- openwrt.yaml
 - shredder.yaml
 - raphael.yaml
