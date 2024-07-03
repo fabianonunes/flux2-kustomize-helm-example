@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cachumba
+  namespace: external-services
+  labels:
+    app: cachumba
+spec:
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    name: metrics
+    port: 80
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: cachumba
+  namespace: external-services
+subsets:
+- addresses:
+  - ip: 192.168.30.205
+  ports:
+  - port: 80
+    name: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-cachumba
+  namespace: external-services
+  labels:
+    jobLabel: tasmota
+spec:
+  jobLabel: jobLabel
+  endpoints:
+  - honorLabels: true
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - external-services
+  selector:
+    matchLabels:
+      app: cachumba
