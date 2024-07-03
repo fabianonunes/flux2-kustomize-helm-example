@@ -7,3 +7,5 @@ resources:
 - truenas.yaml
 - shredder.yaml
 - raphael.yaml
+- encefalite.yaml
+- cachumba.yaml
