@@ -53,7 +53,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: ghcr.io/fabianonunes/openrefine:3.7.7-1
+      - image: ghcr.io/fabianonunes/openrefine:3.8.2-0
         name: openrefine
         ports:
         - containerPort: 3333
