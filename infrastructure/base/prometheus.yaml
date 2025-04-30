@@ -24,14 +24,14 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 61.6.1
+      version: 71.0.0
       sourceRef:
         kind: HelmRepository
         name: prometheus
         namespace: observability
       interval: 12h
   values:
-    # https://raw.githubusercontent.com/prometheus-community/helm-charts/kube-prometheus-stack-61.6.1/charts/kube-prometheus-stack/values.yaml
+    # https://raw.githubusercontent.com/prometheus-community/helm-charts/kube-prometheus-stack-71.0.0/charts/kube-prometheus-stack/values.yaml
     grafana:
       enabled: true
       ingress:
