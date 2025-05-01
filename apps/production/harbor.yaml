@@ -119,9 +119,9 @@ spec:
     database:
       type: external
       external:
-        host: postgresql-postgresql-ha-pgpool.postgresql
+        host: 192.168.10.10
         port: 5432
         username: harbor
-        coreDatabase: registry
+        coreDatabase: harbor
         existingSecret: postgresql-credentials
         sslmode: disable
