@@ -102,9 +102,9 @@ spec:
 
     probes:
       liveness:
-        initialDelaySeconds: 5
+        initialDelaySeconds: 10
       readiness:
-        initialDelaySeconds: 5
+        initialDelaySeconds: 10
 
     ingress:
       enabled: true
