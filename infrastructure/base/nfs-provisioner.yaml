@@ -44,5 +44,5 @@ spec:
       defaultClass: true
       provisionerName: nfs-provisioner
       name: nfs-storage
-      reclaimPolicy: Delete
+      reclaimPolicy: Retain
       archiveOnDelete: false
