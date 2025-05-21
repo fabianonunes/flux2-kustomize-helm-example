@@ -34,8 +34,8 @@ spec:
     strategyType: Recreate
 
     nfs:
-      server: 192.168.10.4
-      path: /mnt/pool0/boo
+      server: 192.168.10.10
+      path: /mnt/bebop/boo/provisioner
       mountOptions:
       - vers=4
       - nosuid
