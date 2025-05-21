@@ -38,8 +38,8 @@ spec:
   capacity:
     storage: 500G
   nfs:
-    server: 192.168.10.4
-    path: /mnt/pool0/plex
+    server: 192.168.10.10
+    path: /mnt/bebop/plex
   accessModes:
   - ReadWriteMany
   storageClassName: manual
