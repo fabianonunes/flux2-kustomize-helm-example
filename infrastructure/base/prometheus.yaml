@@ -60,7 +60,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: proxmox-data
+              storageClassName: freenas-iscsi-csi
               accessModes:
               - ReadWriteOnce
               resources:
