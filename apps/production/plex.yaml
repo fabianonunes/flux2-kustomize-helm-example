@@ -9,7 +9,7 @@ metadata:
   name: config
   namespace: plex
 spec:
-  storageClassName: openebs-hostpath
+  storageClassName: freenas-iscsi-csi
   resources:
     requests:
       storage: 5G
