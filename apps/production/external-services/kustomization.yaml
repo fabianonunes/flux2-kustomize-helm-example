@@ -4,7 +4,6 @@ namespace: external-services
 resources:
 - namespace.yaml
 - proxmox.yaml
-- truenas.yaml
 - shredder.yaml
 - raphael.yaml
 - encefalite.yaml
