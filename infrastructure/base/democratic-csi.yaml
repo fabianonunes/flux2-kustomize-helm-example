@@ -84,7 +84,7 @@ spec:
           detachedSnapshotsDatasetParentName: bebop/boo/snapshots
           zvolCompression: zstd
           # zvolBlocksize:
-          zvolDedup: on
+          zvolDedup:
           zvolEnableReservation: false
         iscsi:
           targetPortal: 192.168.10.10:3260
