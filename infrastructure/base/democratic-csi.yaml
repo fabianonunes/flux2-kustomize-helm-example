@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+  name: democratic-csi
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: democratic-csi
+  namespace: democratic-csi
+spec:
+  type: oci
+  interval: 60m0s
+  url: oci://ghcr.io/democratic-csi/charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: democratic-csi
+  namespace: democratic-csi
+spec:
+  interval: 60m
+  chart:
+    spec:
+      chart: democratic-csi
+      version: 0.15.0
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi
+        namespace: democratic-csi
+      interval: 12h
+  values:
+    csiDriver:
+      name: org.democratic-csi.iscsi
+
+    storageClasses:
+    - name: freenas-iscsi-csi
+      defaultClass: false
+      reclaimPolicy: Retain
+      volumeBindingMode: Immediate
+      allowVolumeExpansion: true
+      parameters:
+        fsType: xfs
+
+    volumeSnapshotClasses:
+    - name: freenas-iscsi-csi
+      parameters:
+        detachedSnapshots: "false"
+
+    node:
+      kubeletHostPath: /var/lib/k0s/kubelet
+
+    driver:
+      config:
+        driver: freenas-iscsi
+        instance_id:
+        httpConnection:
+          protocol: https
+          host: bebop.eth0.work
+          port: 443
+          username: democrat
+          password: ki>chee1keeR-oh9BiaFouw3Oot7yooh
+          allowInsecure: false
+          apiVersion: 2
+        sshConnection:
+          host: 192.168.10.10
+          port: 22
+          username: democrat
+          password: ki>chee1keeR-oh9BiaFouw3Oot7yooh
+        zfs:
+          cli:
+            sudoEnabled: true
+            paths:
+              zfs: /usr/sbin/zfs
+              zpool: /usr/sbin/zpool
+              sudo: /usr/bin/sudo
+              chroot: /usr/sbin/chroot
+          datasetParentName: bebop/boo/iscsi/v
+          detachedSnapshotsDatasetParentName: bebop/boo/iscsi/s
+          zvolCompression: zstd
+          zvolDedup: on
+          zvolEnableReservation: false
+          # zvolBlocksize:
+        iscsi:
+          targetPortal: 192.168.10.10:3260
+          # leave empty to omit usage of -I with iscsiadm
+          interface:
+          namePrefix: csi-
+          nameSuffix: "-cluster"
+          targetGroups:
+          - targetGroupPortalGroup: 3
+            targetGroupInitiatorGroup: 16
+            targetGroupAuthType: None
+            # targetGroupAuthGroup:
+          extentInsecureTpc: true
+          extentXenCompat: false
+          extentDisablePhysicalBlocksize: false
+          extentBlocksize: 512
+          extentRpm: SSD
+          extentAvailThreshold: 0
