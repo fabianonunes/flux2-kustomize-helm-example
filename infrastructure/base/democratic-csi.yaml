@@ -94,7 +94,7 @@ spec:
           nameSuffix: "-cluster"
           targetGroups:
           - targetGroupPortalGroup: 3
-            targetGroupInitiatorGroup: 16
+            targetGroupInitiatorGroup: 17
             targetGroupAuthType: None
             # targetGroupAuthGroup:
           extentInsecureTpc: true
