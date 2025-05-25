@@ -47,28 +47,31 @@ spec:
     volumeSnapshotClasses:
     - name: freenas-iscsi-csi
       parameters:
-        detachedSnapshots: "false"
+        detachedSnapshots: false
 
     node:
       kubeletHostPath: /var/lib/k0s/kubelet
+      driver:
+        image:
+          tag: next
+
+    controller:
+      driver:
+        image:
+          tag: next
 
     driver:
       config:
-        driver: freenas-iscsi
+        driver: freenas-api-iscsi
         instance_id:
         httpConnection:
           protocol: https
-          host: bebop.eth0.work
+          host: 192.168.10.10
           port: 443
           username: democrat
-          password: ki>chee1keeR-oh9BiaFouw3Oot7yooh
-          allowInsecure: false
+          apiKey: 2-xmZ8GUXZ9AgXMHKEFZQx48Htc3qlkr3R9pEYwWFJc8x9VFLFwQvIKKHebMab36lN
+          allowInsecure: true
           apiVersion: 2
-        sshConnection:
-          host: 192.168.10.10
-          port: 22
-          username: democrat
-          password: ki>chee1keeR-oh9BiaFouw3Oot7yooh
         zfs:
           cli:
             sudoEnabled: true
@@ -77,12 +80,12 @@ spec:
               zpool: /usr/sbin/zpool
               sudo: /usr/bin/sudo
               chroot: /usr/sbin/chroot
-          datasetParentName: bebop/boo/iscsi/v
-          detachedSnapshotsDatasetParentName: bebop/boo/iscsi/s
+          datasetParentName: bebop/boo/iscsi
+          detachedSnapshotsDatasetParentName: bebop/boo/snapshots
           zvolCompression: zstd
+          # zvolBlocksize:
           zvolDedup: on
           zvolEnableReservation: false
-          # zvolBlocksize:
         iscsi:
           targetPortal: 192.168.10.10:3260
           # leave empty to omit usage of -I with iscsiadm
