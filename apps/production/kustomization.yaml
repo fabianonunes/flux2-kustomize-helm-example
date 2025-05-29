@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
 - harbor.yaml
 - plex.yaml
+- immich.yaml
 - external-services
