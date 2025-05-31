@@ -54,6 +54,7 @@ spec:
   selector:
     matchLabels:
       eth0.work/service: plex
+  serviceName: plex-svc
   replicas: 1
   template:
     metadata:
@@ -168,6 +169,19 @@ spec:
         volumeMounts:
         - name: conf-d
           mountPath: /etc/nginx/conf.d
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: plex-svc
+  namespace: plex
+  annotations:
+    metallb.universe.tf/allow-shared-ip: plexserver
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    eth0.work/service: plex
 ---
 apiVersion: v1
 kind: Service
