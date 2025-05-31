@@ -68,6 +68,9 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      - name: conf-d
+        configMap:
+          name: conf-d
       containers:
       - name: plex
         image: plexinc/pms-docker:1.41.7.9823-59f304c16
@@ -94,6 +97,30 @@ spec:
           mountPath: /config
         - name: media
           mountPath: /media
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+          name: proxy
+        imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: America/Sao_Paulo
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: conf-d
+          mountPath: /etc/nginx/conf.d
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -103,7 +130,7 @@ metadata:
 data:
   default.conf: |
     upstream plex {
-      server plex-0.plex:32400;
+      server localhost:32400;
     }
 
     server {
@@ -124,65 +151,6 @@ data:
       }
     }
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: proxy
-  namespace: plex
-  labels:
-    app.kubernetes.io/name: proxy
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      eth0.work/service: proxy
-  template:
-    metadata:
-      labels:
-        eth0.work/service: proxy
-    spec:
-      volumes:
-      - name: conf-d
-        configMap:
-          name: conf-d
-      containers:
-      - name: nginx
-        image: nginx:latest
-        imagePullPolicy: Always
-        env:
-        - name: TZ
-          value: America/Sao_Paulo
-        livenessProbe:
-          httpGet:
-            path: /healthcheck
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /healthcheck
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: conf-d
-          mountPath: /etc/nginx/conf.d
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: plex-svc
-  namespace: plex
-  annotations:
-    metallb.universe.tf/allow-shared-ip: plexserver
-spec:
-  type: ClusterIP
-  clusterIP: None
-  selector:
-    eth0.work/service: plex
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -194,11 +162,11 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.10.55
   selector:
-    eth0.work/service: proxy
+    eth0.work/service: plex
   ports:
   - name: plex
     protocol: TCP
-    port: 32400
+    port: 80
   - name: dlna
     protocol: TCP
     port: 32469
