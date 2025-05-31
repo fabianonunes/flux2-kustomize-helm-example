@@ -6,7 +6,7 @@ metadata:
     pod-security.kubernetes.io/enforce: privileged
   name: csi-proxmox
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: proxmox-csi-plugin
@@ -16,7 +16,7 @@ spec:
   interval: 60m0s
   url: oci://ghcr.io/sergelogvinov/charts/
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: csi-proxmox

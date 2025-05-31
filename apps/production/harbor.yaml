@@ -3,7 +3,7 @@ kind: Namespace
 metadata:
   name: harbor
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: harbor
@@ -36,7 +36,7 @@ sops:
   encrypted_regex: ^(data|stringData)$
   version: 3.8.1
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: harbor

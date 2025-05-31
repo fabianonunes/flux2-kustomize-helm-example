@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: velero
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: velero
@@ -14,7 +14,7 @@ spec:
   interval: 60m0s
   url: oci://ghcr.io/vmware-tanzu/charts/
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: velero
