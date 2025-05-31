@@ -54,7 +54,6 @@ spec:
   selector:
     matchLabels:
       eth0.work/service: plex
-  serviceName: plex
   replicas: 1
   template:
     metadata:
