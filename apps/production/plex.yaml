@@ -95,6 +95,81 @@ spec:
         - name: media
           mountPath: /media
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: conf-d
+  namespace: plex
+data:
+  default.conf: |
+    upstream plex {
+      server plex-0.plex:32400;
+    }
+
+    server {
+      listen                     80;
+      server_name                _;
+
+      error_log                  /var/log/nginx/error.log error;
+
+      location /healthcheck {
+        default_type text/plain;
+        return 200 'OK';
+      }
+
+      location / {
+        proxy_pass               http://plex;
+        proxy_redirect           off;
+        proxy_buffering          off;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy
+  namespace: plex
+  labels:
+    app.kubernetes.io/name: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      eth0.work/service: proxy
+  template:
+    metadata:
+      labels:
+        eth0.work/service: proxy
+    spec:
+      volumes:
+      - name: conf-d
+        configMap:
+          name: conf-d
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: America/Sao_Paulo
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: conf-d
+          mountPath: /etc/nginx/conf.d
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -106,7 +181,7 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.10.55
   selector:
-    eth0.work/service: plex
+    eth0.work/service: proxy
   ports:
   - name: plex
     protocol: TCP
