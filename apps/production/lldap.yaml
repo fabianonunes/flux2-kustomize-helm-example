@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ldap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env
+  namespace: ldap
+data:
+  UID: "1000"
+  GID: "1000"
+  TZ: America/Sao_Paulo
+  VERBOSE: "true"
+  LLDAP_LDAP_BASE_DN: dc=eth0,dc=work
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret
+  namespace: ldap
+type: Opaque
+stringData:
+  LLDAP_DATABASE_URL: ENC[AES256_GCM,data:cw6krMdS+70dhJyHZCjAljBNsmv98uJWSFj3cRum4m7CIWh6WPqxdyVn//4JWO3Jwy5RAXzI6clg,iv:41z37HSIVo59xV85YOr3beMHbtNMFtqpU0iiU0r15p8=,tag:SgfoUfZlIBsVvSLzV3VG9g==,type:str]
+  LLDAP_JWT_SECRET: ENC[AES256_GCM,data:Tw3jGf5nGEXK+xKff8D5fbOmrWY=,iv:1je+BdAaGWZLs3bi5AdTANA/6rkNgtFNmglLVNy3Aks=,tag:raPLW9nRYWjZkPh5di56zA==,type:str]
+  LLDAP_KEY_SEED: ENC[AES256_GCM,data:SLJdO2CouM6SXAr7tN6lbU7dzIE=,iv:frkrKOqO3PftTQfznvsCi9wedJ/1N3EJEvEM2F3hYVY=,tag:b8fRfB8K6klKLBw6wlnRXw==,type:str]
+  LLDAP_LDAP_USER_PASS: ENC[AES256_GCM,data:eJTbH4EdN04tsKnNbvZMwFxS7h8=,iv:HfdrrUMtSeKwJAWJ/6pE8j3Dou0t7aE4CTIqebP4GHc=,tag:L9SlEvfB0eVtoJq9kg6QcQ==,type:str]
+sops:
+  age:
+  - recipient: age1wpk6a50fj9hepmve43dtx36fr6rfat6nsms6fx6rf4x2udmmtutsmtzctr
+    enc: |
+      -----BEGIN AGE ENCRYPTED FILE-----
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaWFdFSk5xNGhmdXFWaVVQ
+      WFZnWE1MMjkvdmpuSUZoUnF0RFc1eHZER0JjCkZPdll0QkdqR2c5RVgvUm1YNkRD
+      bFZXUnFvS0ZiRUIwTmJaMEsycG0yL00KLS0tIDFuVENMaGVJY1QrTmpGcWF2VTRD
+      c3lvM1BOblZ5SW40N2gzMUNSZFM5WGsKyR1PCka0nAL6YvmgG5v89zLIXOrP3ax0
+      6zyshrJvsTFDEbFRrR6T/C8OvfABjlnuMcmy+b2M9YEGjPfgSVDmKQ==
+      -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-06-15T22:11:54Z"
+  mac: ENC[AES256_GCM,data:7cx7hUYe3GNUBSpk464EORnFJXYo9Y5IIVtrD7vkf0Ufr4ACEXP5XI8pV9wfQPBsrNHNZthTXig3X/4aKJhaTzK3+ThLtnoHnnLXWHZ7cUym2s8ZFBfUY4eBNQpdLIjoeUE7pq/2RFEOauHltXa6NnKUd5f0qB2OQr2v0w1Yzd4=,iv:jVrhmUDfV1UTNbrPXqTsqGOEDhIlOJ1sRBN2vkxXYaQ=,tag:8vnsF0tE3tqcvGinql0YwA==,type:str]
+  encrypted_regex: ^stringData$
+  version: 3.10.2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ldap
+  namespace: ldap
+spec:
+  selector:
+    matchLabels:
+      app: ldap
+  template:
+    metadata:
+      labels:
+        app: ldap
+    spec:
+      volumes:
+      - name: data
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: ldap
+        image: lldap/lldap:stable
+        envFrom:
+        - secretRef:
+            name: secret
+        - configMapRef:
+            name: env
+        startupProbe:
+          exec:
+            command:
+            - /app/lldap
+            - healthcheck
+        readinessProbe:
+          exec:
+            command:
+            - /app/lldap
+            - healthcheck
+        livenessProbe:
+          exec:
+            command:
+            - /app/lldap
+            - healthcheck
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 500m
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        ports:
+        - containerPort: 3890
+        - containerPort: 17170
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ldap
+  namespace: ldap
+spec:
+  type: ClusterIP
+  selector:
+    app: ldap
+  ports:
+  - name: ldap
+    port: 3890
+  - name: web
+    port: 17170
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ldap
+  namespace: ldap
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: ldap.boo.eth0.work
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ldap
+            port:
+              name: web
+  tls:
+  - hosts:
+    - ldap.boo.eth0.work
+    secretName: ldap-le-cert

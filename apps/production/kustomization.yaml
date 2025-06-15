@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
 - harbor.yaml
 - immich.yaml
+- lldap.yaml
 - external-services
