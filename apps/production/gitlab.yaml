@@ -35,7 +35,7 @@ spec:
       hosts:
         domain: boo.eth0.work
         https: true
-        ssh: gitlab.boo.eth0.work
+        ssh: ssh.gitlab.boo.eth0.work
 
       monitoring:
         enabled: true
