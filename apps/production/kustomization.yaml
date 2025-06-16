@@ -4,4 +4,5 @@ resources:
 - harbor.yaml
 - immich.yaml
 - lldap.yaml
+- gitlab.yaml
 - external-services

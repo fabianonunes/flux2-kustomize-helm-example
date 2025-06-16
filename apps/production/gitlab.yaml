@@ -1,0 +1,149 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: gitlab
+  namespace: gitlab
+spec:
+  interval: 5m
+  url: https://charts.gitlab.io/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gitlab
+  namespace: gitlab
+spec:
+  interval: 60m
+  chart:
+    spec:
+      chart: gitlab
+      version: 9.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: gitlab
+        namespace: gitlab
+      interval: 12h
+  values:
+    global:
+      edition: ce
+
+      hosts:
+        domain: boo.eth0.work
+        https: true
+        ssh: gitlab.boo.eth0.work
+
+      monitoring:
+        enabled: true
+
+      ingress:
+        enabled: true
+        class: haproxy
+        configureCertmanager: false
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+        tls:
+          secretName: gitlab-tls
+
+      psql:
+        host: 192.168.10.10
+        database: gitlab
+        username: gitlab
+        password:
+          useSecret: true
+          secret: gitlab-postgres
+          key: password
+
+      registry:
+        enabled: false
+      minio:
+        enabled: false
+      kas:
+        enabled: false
+
+      appConfig:
+        ldap:
+          servers:
+            main:
+              label: LDAP@boo
+              host: ldap.ldap
+              port: 3890
+              encryption: plain
+              uid: uid
+              bind_dn: cn=aplic-boo,ou=people,dc=eth0,dc=work
+              base: ou=people,dc=eth0,dc=work
+              user_filter: (&(objectclass=person)(memberof=cn=gitlab,ou=groups,dc=eth0,dc=work))
+              lowercase_usernames: true
+              active_directory: false
+              block_auto_created_users: true
+              password:
+                secret: gitlab-ldap
+                key: password
+        object_store:
+          enabled: true
+          proxy_download: true
+          storage_options:
+          connection:
+            secret: storage-config
+
+    nginx-ingress:
+      enabled: false
+
+    prometheus:
+      install: false
+
+    # certmanager.install está deprecado em favor da chave `installCertmanager`
+    installCertmanager: false
+
+    gitlab-runner:
+      install: false
+
+    postgresql:
+      install: false
+
+    registry:
+      enabled: false
+
+    gitlab:
+      webservice:
+        minReplicas: 1
+        maxReplicas: 1
+      gitlab-shell:
+        minReplicas: 1
+        maxReplicas: 1
+        service:
+          type: LoadBalancer
+          annotations:
+            metallb.universe.tf/allow-shared-ip: "10.51"
+            metallb.universe.tf/ip-allocated-from-pool: main-pool
+          loadBalancerIP: 192.168.10.51
+      gitlab-exporter:
+        enabled: false
+      sidekiq:
+        minReplicas: 1
+        maxReplicas: 1
+      gitaly:
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+        persistence:
+          storageClass: freenas-iscsi-csi
+      toolbox:
+        backups:
+          cron:
+            enabled: true
+            extraArgs: --maximum-backups 14 --skip db
+          objectStorage:
+            config:
+              secret: storage-config
+              key: config
+
+    redis:
+      master:
+        persistence:
+          enabled: false
