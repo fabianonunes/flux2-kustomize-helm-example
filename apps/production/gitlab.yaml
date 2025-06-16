@@ -126,6 +126,7 @@ spec:
       sidekiq:
         minReplicas: 1
         maxReplicas: 1
+        concurrency: 5
       gitaly:
         metrics:
           enabled: true
