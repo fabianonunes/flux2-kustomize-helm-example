@@ -31,7 +31,7 @@ spec:
       interval: 12h
   values:
     image:
-      tag: v1.135.0
+      tag: v1.135.1
 
     immich:
       metrics:
