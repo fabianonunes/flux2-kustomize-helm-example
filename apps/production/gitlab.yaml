@@ -135,10 +135,13 @@ spec:
         persistence:
           storageClass: freenas-iscsi-csi
       toolbox:
+        image:
+          repository: registry.boo.eth0.work/library/gitlab-toolbox-ce
+          tag: v18.1.0-pg17.5-0
         backups:
           cron:
             enabled: true
-            extraArgs: --maximum-backups 14 --skip db
+            extraArgs: --maximum-backups 14 # --skip db
           objectStorage:
             config:
               secret: storage-config
